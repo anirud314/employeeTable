@@ -1,9 +1,6 @@
 //This is the driver code with the inquirer and the init function
 const inquirer = require("inquirer");
-//const { type } = require("os");
-//const { title } = require("process");
-//const logo = require("asciiart-logo");
-const db = require("./db");
+const db = require("./db"); //There is an error here and I dont really know how to fix it.
 require("console.table");
 
 
@@ -349,7 +346,6 @@ function quit(){
     process.exit();
 }
 function init(){
-    //console.log
     inquirer.prompt(menu)
         .then(res => {
             let choice = res.choice;
