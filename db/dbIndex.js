@@ -52,22 +52,22 @@ class DB {
             "SELECT department.id, department.name FROM department;"
         );
     }
-    findEmpByDept(departmentId) {
+    /*findEmpByDept(departmentId) {
         return this.mysqlConnect
         .promise()
         .query(
             "SELECT employee.id, employee.first_name, employee.last_name, role.title FROM employee LEFT JOIN role on employee.role_id = role.id LEFT JOIN department department on role.department_id = department.id WHERE department.id = ?;",
             departmentId
         );
-    }
-    findEmpByMngr(managerId){
+    }*/
+    /*findEmpByMngr(managerId){
         return this.mysqlConnect
         .promise()
         .query(
             "SELECT employee.id, employee.first_name, employee.last_name, department.name AS department, role.title FROM employee LEFT JOIN role on role.id = employee.role_id LEFT JOIN department ON department.id = role.department_id WHERE manager_id = ?;",
             managerId
         );
-    }
+    }*/
     findAllMngr(employeeId) {
         return this.mysqlConnect
         .promise()
@@ -76,13 +76,13 @@ class DB {
             employeeId
         );
     }
-    findDeptBdgts() {
+    /*findDeptBdgts() {
         return this.connection
         .promise()
         .query(
             "SELECT department.id, department.name, SUM(role.salary) AS utilized_budget FROM employee LEFT JOIN role on employee.role_id = role.id LEFT JOIN department on role.department_id = department.id GROUP BY department.id, department.name;"
         );
-    }
+    }*/
     //UPDATE
     updateEmpRole(employeeId, roleId) {
         return this.connection
@@ -92,16 +92,16 @@ class DB {
             [roleId, employeeId]
         );
     }
-    updateEmpMngr(employeeId, managerId) {
+    /*updateEmpMngr(employeeId, managerId) {
         return this.connection
         .promise()
         .query(
             "UPDATE employee SET manager_id = ? WHERE id = ?",
             [managerId, employeeId]
         );
-    }
+    }*/
     //DELETE
-    rmvEmp(employeeId) {
+    /*rmvEmp(employeeId) {
         return this.connection
         .promise()
         .query(
@@ -124,7 +124,7 @@ class DB {
             "DELETE FROM department WHERE id = ?",
             departmentId
         );
-    }
+    }*/
 }
 
 module.exports = new DB(mysqlConnect);
