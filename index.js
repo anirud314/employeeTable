@@ -76,23 +76,6 @@ const menu = [
     }
 ]
 
-const addRoleMenu = [
-    {
-        name: "position",
-        message: "what is the name of the role?"
-    },
-    {
-        name: "salary",
-        message: "what is the roles salary?"
-    },
-    {
-        type: "list",
-        name: "deptId",
-        message: "What department does the role belong in?",
-        choices: deptMenu
-    }
-]
-
 function mainMenu(input){
     switch (input) {
         case "viewEmployees":
@@ -297,7 +280,22 @@ function addRole(){
             name: name,
             value: id
         }));
-        inquirer.prompt(addRoleMenu)
+        inquirer.prompt([
+            {
+                name: "position",
+                message: "what is the name of the role?"
+            },
+            {
+                name: "salary",
+                message: "what is the roles salary?"
+            },
+            {
+                type: "list",
+                name: "deptId",
+                message: "What department does the role belong in?",
+                choices: deptMenu
+            }
+        ])
         .then(role => {
             db.createRole(role)
                 .then(() => console.log(role.title+" Added Role to database"))
