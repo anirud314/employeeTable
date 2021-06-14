@@ -128,26 +128,36 @@ function mainMenu(input){
 }
 
 function viewEmp(){
-    
-
+    db.findAllEmp()
+        .then(([rows]) =>{
+            let emp = rows;
+            console.log("\n");
+            console.table(emp);
+        })
+        .then(() => init());
 }
+
 function viewEmpDept(){
+    console.log ("DOES NOT WORK YET (TRIED TO DO, DIDNT WORK)");
+    init();
 
-}
 function viewEmpMngr(){
-
+    console.log ("DOES NOT WORK YET (TRIED TO DO, DIDNT WORK)");
+    init();
 }
 function addEmp(){
 
 }
 function rmvEmp(){
-
+    console.log ("DOES NOT WORK YET (TRIED TO DO, DIDNT WORK)");
+    init();
 }
 function updateRole(){
 
 }
 function updateMngr(){
-
+    console.log ("DOES NOT WORK YET (TRIED TO DO, DIDNT WORK)");
+    init();
 }
 function viewRoles(){
 
@@ -156,7 +166,8 @@ function addRole(){
 
 }
 function rmvRole(){
-
+    console.log ("DOES NOT WORK YET (TRIED TO DO, DIDNT WORK)");
+    init();
 }
 function viewDept(){
 
@@ -165,21 +176,25 @@ function addDept(){
 
 }
 function rmvDept(){
-
+    console.log ("DOES NOT WORK YET (TRIED TO DO, DIDNT WORK)");
+    init();
 }
 function viewBudget(){
-
+    console.log ("DOES NOT WORK YET (TRIED TO DO, DIDNT WORK)");
+    init();
 }
 function quit(){
-
+    console.log("Thank you, Goodbye")
+    process.exit();
 }
 function init(){
-    console.log
+    //console.log
     inquirer.prompt(menu)
         .then(res => {
             let choice = res.choice;
             mainMenu(choice);
         })
+    }
 }
 
 init();
