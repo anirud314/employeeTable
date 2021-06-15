@@ -138,15 +138,6 @@ function viewEmp(){
         })
         .then(() => init()); // call init function
 }
-
-function viewEmpDept(){ 
-    console.log ("DOES NOT WORK YET (TRIED TO DO, DIDNT WORK)");
-    init();
-}
-function viewEmpMngr(){
-    console.log ("DOES NOT WORK YET (TRIED TO DO, DIDNT WORK)");
-    init();
-}
 function addEmp(){ // adds employee
     inquirer.prompt([ // use inquirer to get user input for variables
         {
@@ -215,39 +206,35 @@ function addEmp(){ // adds employee
             })
     })
 }
-function rmvEmp(){
-    console.log ("DOES NOT WORK YET (TRIED TO DO, DIDNT WORK)");
-    init();
-}
-function updateRole(){
-    db.findAllEmp()
+function updateRole(){ // updateRole is used to update the role of a select user
+    db.findAllEmp() // use the find all emp function from db
         .then(([rows]) => {
             let emp = rows;
-            const empMenu = emp.map(({id, first_name, last_name}) =>(
+            const empMenu = emp.map(({id, first_name, last_name}) =>( 
                 {
                     name: `${first_name} ${last_name}`,
                     value: id
-                }
+                } // sets up values for menu
             ));
-            inquirer.prompt([
+            inquirer.prompt([ // inquirer asks for a list of employees you want to update
                 {
                     type: "list",
                     name: "empId",
                     message: "Which employee do you want to select to update their roles.",
-                    choices: empMenu
+                    choices: empMenu // use empMenu to generate list made in earlier code
                 }   
             ])
             .then(res => {
-                let empId = res.empId;
-                db.findAllRoles()
+                let empId = res.empId; // set employee id to empId response
+                db.findAllRoles() // use find all roles to get a list of roles avaliable
                     .then(([rows]) => {
                         let roles = rows;
-                        const roleMenu = roles.map(({id, position}) => ({
+                        const roleMenu = roles.map(({id, position}) => ({ // create menu to use for inquirer
                             name: position,
                             value: id
                         }));
 
-                        prompt([
+                        inquirer.prompt([ // inquirer for a choice from generated list of roles
                             {
                                 type: "list",
                                 name: "roleId",
@@ -255,19 +242,15 @@ function updateRole(){
                                 choices: roleMenu
                             }
                         ])
-                        .then(res => db.updateEmployeeRole(employeeId, res.roleId))
+                        .then(res => db.updateEmployeeRole(employeeId, res.roleId)) // call the update employee role function from db and change it to the role selected from the response
                         .then(() => console.log("Updated employee's role"))
                         .then(() => init())
                     })
             })
         })
 }
-function updateMngr(){
-    console.log ("DOES NOT WORK YET (TRIED TO DO, DIDNT WORK)");
-    init();
-}
-function viewRoles(){
-    db.findAllRoles()
+function viewRoles(){ // View roles works the same as view employees
+    db.findAllRoles()// calls findAllRoles function from db
     .then(([rows]) => {
         let roles = rows;
         console.log("\n");
@@ -306,12 +289,9 @@ function addRole(){
         })
     })
 }
-function rmvRole(){
-    console.log ("DOES NOT WORK YET (TRIED TO DO, DIDNT WORK)");
-    init();
-}
-function viewDept(){
-    db.findAllDept()
+
+function viewDept(){// viewDept works the same as the other view functions
+    db.findAllDept()// calls find all departments.
         .then(([rows]) => {
             let dept = rows;
             console.log("\n");
@@ -319,8 +299,8 @@ function viewDept(){
         })
         .then(() => init());
 }
-function addDept(){
-    inquirer.prompt([
+function addDept(){ // function used to add departments to the table
+    inquirer.prompt([ // uses inquirer to get a response for adding dept
         {
             name: "deptName",
             message: "what is the department called"
@@ -328,11 +308,24 @@ function addDept(){
     ])
     .then(res => {
         var deptName = res;
-        db.createDept(deptName)
+        db.createDept(deptName)// create department using response value
             .then(() => console.log(deptName.name+" Added Role to database"))
             .then(() => init())
 
     })
+}
+function quit(){ // Quits program
+    console.log("Thank you, Goodbye")
+    process.exit();
+}
+//BONUS FUNCTIONS ---- NOT DONE!!!!!
+function viewEmpDept(){ 
+    console.log ("DOES NOT WORK YET (TRIED TO DO, DIDNT WORK)");
+    init();
+}
+function viewEmpMngr(){
+    console.log ("DOES NOT WORK YET (TRIED TO DO, DIDNT WORK)");
+    init();
 }
 function rmvDept(){
     console.log ("DOES NOT WORK YET (TRIED TO DO, DIDNT WORK)");
@@ -342,9 +335,17 @@ function viewBudget(){
     console.log ("DOES NOT WORK YET (TRIED TO DO, DIDNT WORK)");
     init();
 }
-function quit(){
-    console.log("Thank you, Goodbye")
-    process.exit();
+function rmvRole(){
+    console.log ("DOES NOT WORK YET (TRIED TO DO, DIDNT WORK)");
+    init();
+}
+function updateMngr(){
+    console.log ("DOES NOT WORK YET (TRIED TO DO, DIDNT WORK)");
+    init();
+}
+function rmvEmp(){
+    console.log ("DOES NOT WORK YET (TRIED TO DO, DIDNT WORK)");
+    init();
 }
 function init(){
     inquirer.prompt(menu)
