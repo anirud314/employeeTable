@@ -3,7 +3,7 @@ const inquirer = require("inquirer");
 const db = require("./db"); //There is an error here and I dont really know how to fix it.
 require("console.table");
 
-
+// options for menu for users to select from
 const menuChoices = [
     {
         name: "View all employees",
@@ -67,6 +67,7 @@ const menuChoices = [
     }   
 ];
 
+// menu inquirer prompt for user to use
 const menu = [
     {
         type: "list",
@@ -76,6 +77,7 @@ const menu = [
     }
 ]
 
+// Main menu function used to hold a switch case statement that calls specific function based on input from inquirer
 function mainMenu(input){
     switch (input) {
         case "viewEmployees":
@@ -126,17 +128,18 @@ function mainMenu(input){
 
 }
 
+// Function to view employee
 function viewEmp(){
-    db.findAllEmp()
-        .then(([rows]) =>{
-            let emp = rows;
+    db.findAllEmp() // calls find all employee function from db code
+        .then(([rows]) =>{ // returns the rows from the tables and uses it for the next function
+            let emp = rows;// set emp variable to equal rows
             console.log("\n");
-            console.table(emp);
+            console.table(emp);// print out table
         })
-        .then(() => init());
+        .then(() => init()); // call init function
 }
 
-function viewEmpDept(){
+function viewEmpDept(){ 
     console.log ("DOES NOT WORK YET (TRIED TO DO, DIDNT WORK)");
     init();
 }
@@ -144,8 +147,8 @@ function viewEmpMngr(){
     console.log ("DOES NOT WORK YET (TRIED TO DO, DIDNT WORK)");
     init();
 }
-function addEmp(){
-    inquirer.prompt([
+function addEmp(){ // adds employee
+    inquirer.prompt([ // use inquirer to get user input for variables
         {
             name: "first_name",
             message: "What is the first name?"
@@ -156,19 +159,19 @@ function addEmp(){
         }
     ])
     .then(res => {
-        let firstName = res.first_name;
-        let lastName = res.last_name;
+        let firstName = res.first_name; // assign values for first name
+        let lastName = res.last_name; // and last name
 
-        db.findAllRoles()
+        db.findAllRoles() //call find all role function in db, this allows us to select a role for the new employee
             .then(([rows]) => {
                 let emp = rows
-                const roleMenu = emp.map(({id, first_name, last_name}) => (
+                const roleMenu = emp.map(({id, first_name, last_name}) => ( // map data returned from findallrole
                     {
                         name: title,
                         value: id
                     }
                 ));
-                inquirer.prompt([
+                inquirer.prompt([ // use inquirer to select a role based on the list of roles
                     {
                         type: "list",
                         name: "roleId",
@@ -177,33 +180,33 @@ function addEmp(){
                     }
                 ])
                 .then(res => {
-                    let roleId = res.roleId;
+                    let roleId = res.roleId; // role Id for user is based of of the response from the inquirer
 
-                    db.findAllEmp()
+                    db.findAllEmp() // findallEmp function used to find all employees in select role
                         .then(([rows]) => {
                             let emp = rows;
-                            const mngrMenu = emp.map (({id, first_name, last_name}) => ({
+                            const mngrMenu = emp.map (({id, first_name, last_name}) => ({ // should return a map of managers
                                 name: `${first_name} ${last_name}`,
                                 value: id
                             }));
 
-                            mngrMenu.unshift({name: "None", value: null});
+                            mngrMenu.unshift({name: "None", value: null});  // removes all items without a name and value
 
-                            inquirer.prompt([{
+                            inquirer.prompt([{ // prompt used to select a manager from the generated manager menu from above
                                 type:"list",
                                 name: "managerId",
                                 message: "Who is the manager?",
                                 choices: mngrMenu
                             }])
                             .then (res => {
-                                let emp = {
-                                    manager_id: res.managerId,
-                                    role_id: roleId,
-                                    first_name: firstName,
-                                    last_name: lastName
+                                let emp = { // assign values to the new employee
+                                    manager_id: res.managerId, // assign manager id from response
+                                    role_id: roleId,// assign roleId from roleId used
+                                    first_name: firstName, // assign firstName where firstname is used
+                                    last_name: lastName // assign last name where last name is used
                                 }
 
-                                db.createEmp(emp)
+                                db.createEmp(emp) // use create employee function from emp variable
                             })
                             .then(() => console.log("Added new player in db"))
                             .then(() => init())
