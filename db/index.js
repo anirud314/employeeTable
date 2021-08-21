@@ -1,29 +1,29 @@
 //This file has the db class model
-const mysqlConnect = require("./connection");
+const connection = require("./connection");
 
 class DB {
-    constructor(mysqlConnect){
-        this.mysqlConnect = mysqlConnect;
+    constructor(connection){
+        this.connection = connection;
     }
 
     /*CRUD*/
     //CREATE
     createEmp(employee){
-        return this.mysqlConnect
+        return this.connection
         .promise()
         .query(
             "INSERT INTO employee SET ?", employee
         );
     }
     createRole(role){
-        return this.mysqlConnect
+        return this.connection
         .promise()
         .query(
             "INSERT INTO role SET ?", role
         );
     }
     createDept(department){
-        return this.mysqlConnect
+        return this.connection
         .promise()
         .query(
             "INSERT INTO department SET ?", department
@@ -31,22 +31,22 @@ class DB {
     }
     //READ
     findAllEmp(){
-        return this.mysqlConnect
+        return this.connection
         .promise()
         .query(
-            "SELECT id, first_name, last_name FROM employee WHERE id != ?",
-            empId
+            "SELECT employee.id, employee.first_name, employee.last_name, role.title, department.name AS department, role.salary, CONCAT(manager.first_name, ' ', manager.last_name) AS manager FROM employee LEFT JOIN role on employee.role_id = role.id LEFT JOIN department on role.department_id = department.id LEFT JOIN employee manager on manager.id = employee.manager_id;"
+            //empId
         );
     }
     findAllRoles(){
-        return this.mysqlConnect
+        return this.connection
         .promise()
         .query(
             "SELECT role.id, role.title, department.name AS department, role.salary FROM role LEFT JOIN department on role.department_id = department.id;"
         );
     }
     findAllDept(){
-        return this.mysqlConnect
+        return this.connection
         .promise()
         .query(
             "SELECT department.id, department.name FROM department;"
@@ -54,7 +54,7 @@ class DB {
     }
 
     findAllMngr(employeeId) {
-        return this.mysqlConnect
+        return this.connection
         .promise()
         .query(
             "SELECT id, first_name, last_name FROM employee WHERE id != ?",
@@ -73,4 +73,4 @@ class DB {
     }
 }
 
-module.exports = new DB(mysqlConnect);
+module.exports = new DB(connection);

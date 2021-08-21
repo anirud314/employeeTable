@@ -1,7 +1,6 @@
 /*This file holds the seed data for the sql table*/
 /*Given seed by tutor to use to test*/
 use employeeTable;
-
 INSERT INTO department
     (name)
 VALUES

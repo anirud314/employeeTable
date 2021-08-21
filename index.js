@@ -1,10 +1,134 @@
 //This is the driver code with the inquirer and the init function
 const inquirer = require("inquirer");
+//const connection = reqire("./db/connection.js");
 const db = require("./db"); //There is an error here and I dont really know how to fix it.
 require("console.table");
 
+function init(){
+    inquirer.prompt([
+        {
+            type: "list",
+            name: "choice",
+            message: "What would you like to do?",
+            choices: [
+                {
+                    name: "View all employees",
+                    value:"viewEmployees"
+                },
+                {
+                    name: "View employees by department",
+                    value:"viewEmployeesDept"
+                },
+                {
+                    name: "View employees by manager",
+                    value:"viewEmployeesMngr"
+                },
+                {
+                    name: "Add employee",
+                    value:"addEmployee"
+                },
+                {
+                    name: "Remove Employee",
+                    value:"rmvEmployee"
+                },
+                {
+                    name: "Update employee role",
+                    value:"updateRole"
+                },
+                {
+                    name: "Update employee manager",
+                    value:"updateMngr"
+                },
+                {
+                    name: "View all roles",
+                    value:"viewRoles"
+                },
+                {
+                    name: "Add Role",
+                    value:"addRole"
+                },
+                {
+                    name: "Remove Role",
+                    value:"rmvRole"
+                },
+                {
+                    name: "View all departments",
+                    value:"viewDepartments"
+                },
+                {
+                    name: "Add a department",
+                    value:"addDepartments"
+                },
+                {
+                    name: "Remove a department",
+                    value:"rmvDepartments"
+                },
+                {
+                    name: "View Total utilized budget by department",
+                    value:"viewBudget"
+                },
+                {
+                    name: "quit",
+                    value:"quit"
+                }   
+            ]
+        }
+    ])
+    .then(res => {
+        let choice = res.choice;
+        console.log(choice);
+        switch (choice) {
+            case "viewEmployees":
+                viewEmp();
+                break;
+            case "viewEmployeesDept":
+                viewEmpDept();
+                break;
+            case "viewEmployeesMngr":
+                viewEmpMngr();
+                break;
+            case "addEmployee":
+                addEmp();
+                break;
+            case "rmvEmployee":
+                rmvEmp();
+                break;
+            case "updateRole":
+                updateRole();
+                break;
+            case "updateMngr":
+                updateMngr();
+                break;
+            case "viewRoles":
+                viewRoles();
+                break;
+            case "addRole":
+                addRole();
+                break;
+            case "rmvRole":
+                rmvRole();
+                break;
+            case "viewDepartments":
+                viewDept();
+                break;
+            case "addDepartments":
+                addDept();
+                break;
+            case "rmvDepartments":
+                rmvDept();
+                break;
+            case "viewBudget":
+                viewBudget();
+                break;
+            case "quit":
+                quit();
+                break;
+        }
+    })
+}
+
 // options for menu for users to select from
-const menuChoices = [
+/*const menuChoices = [
     {
         name: "View all employees",
         value:"viewEmployees"
@@ -62,23 +186,24 @@ const menuChoices = [
         value:"viewBudget"
     },
     {
-        name: "Quit",
+        name: "quit",
         value:"quit"
     }   
-];
+];*/
 
 // menu inquirer prompt for user to use
-const menu = [
+/*const menu = [
     {
         type: "list",
         name: "MainMenu",
         message: "What would you like to do?",
         choices: menuChoices
     }
-]
+]*/
 
 // Main menu function used to hold a switch case statement that calls specific function based on input from inquirer
-function mainMenu(input){
+/*function mainMenu(input){
+    console.log(input);
     switch (input) {
         case "viewEmployees":
             viewEmp();
@@ -109,7 +234,7 @@ function mainMenu(input){
             break;
         case "rmvRole":
             rmvRole();
-                break;
+            break;
         case "viewDepartments":
             viewDept();
             break;
@@ -122,11 +247,12 @@ function mainMenu(input){
         case "viewBudget":
             viewBudget();
             break;
-        default:
+        case "quit":
             quit();
+            break;
     }
 
-}
+}*/
 
 // Function to view employee
 function viewEmp(){
@@ -138,13 +264,16 @@ function viewEmp(){
         })
         .then(() => init()); // call init function
 }
+
 function addEmp(){ // adds employee
     inquirer.prompt([ // use inquirer to get user input for variables
         {
+            type: "input",
             name: "first_name",
             message: "What is the first name?"
         },
         {
+            type: "input",
             name: "last_name",
             message: "What is the last name?"
         }
@@ -156,7 +285,7 @@ function addEmp(){ // adds employee
         db.findAllRoles() //call find all role function in db, this allows us to select a role for the new employee
             .then(([rows]) => {
                 let emp = rows
-                const roleMenu = emp.map(({id, first_name, last_name}) => ( // map data returned from findallrole
+                const roleMenu = emp.map(({id, title}) => ( // map data returned from findallrole
                     {
                         name: title,
                         value: id
@@ -229,8 +358,8 @@ function updateRole(){ // updateRole is used to update the role of a select user
                 db.findAllRoles() // use find all roles to get a list of roles avaliable
                     .then(([rows]) => {
                         let roles = rows;
-                        const roleMenu = roles.map(({id, position}) => ({ // create menu to use for inquirer
-                            name: position,
+                        const roleMenu = roles.map(({title, id}) => ({ // create menu to use for inquirer
+                            name: title,
                             value: id
                         }));
 
@@ -242,7 +371,7 @@ function updateRole(){ // updateRole is used to update the role of a select user
                                 choices: roleMenu
                             }
                         ])
-                        .then(res => db.updateEmployeeRole(employeeId, res.roleId)) // call the update employee role function from db and change it to the role selected from the response
+                        .then(res => db.updateEmpRole(empId, res.roleId)) // call the update employee role function from db and change it to the role selected from the response
                         .then(() => console.log("Updated employee's role"))
                         .then(() => init())
                     })
@@ -268,16 +397,18 @@ function addRole(){
         }));
         inquirer.prompt([
             {
-                name: "position",
+                type: "input",
+                name: "title",
                 message: "what is the name of the role?"
             },
             {
+                type: "input",
                 name: "salary",
                 message: "what is the roles salary?"
             },
             {
                 type: "list",
-                name: "deptId",
+                name: "department_id",
                 message: "What department does the role belong in?",
                 choices: deptMenu
             }
@@ -302,7 +433,8 @@ function viewDept(){// viewDept works the same as the other view functions
 function addDept(){ // function used to add departments to the table
     inquirer.prompt([ // uses inquirer to get a response for adding dept
         {
-            name: "deptName",
+            type: "input",
+            name: "name",
             message: "what is the department called"
         }
     ])
@@ -347,11 +479,6 @@ function rmvEmp(){
     console.log ("DOES NOT WORK YET (TRIED TO DO, DIDNT WORK)");
     init();
 }
-function init(){
-    inquirer.prompt(menu)
-        .then(res => {
-            let choice = res.choice;
-            mainMenu(choice);
-        })
-}
+
+
 init();
