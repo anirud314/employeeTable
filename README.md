@@ -1,4 +1,13 @@
 # 12 SQL: Employee Tracker
+
+## UPDATE 8/25/21
+
+I got the errors fixed with working with a tutor. All of my errors were related to messing up the connections for the inquirer. The issue was that I passed around the inputs and the data too many times for inquirer and it caused it not to take input correctly. so I got that fixed and after I fixed that I was able to start troubleshooting why the each command wasnt working. Turns out I switched naming conventions between what was already inputted into the skeleton code and what I was inputting. I basically let my shorthand defeat me. This was hard to troubleshoot for my tutor and i, and as i dont have time I wasnt able to finish the bonus material. I just let it console log a not functional message.
+
+here is a screenshot gif of it working
+
+![Error 1](./Assets/stable.gif)
+
 ## Screenshots (Currently Failing):
 ![Error 1](./Assets/Error.JPG)
 
